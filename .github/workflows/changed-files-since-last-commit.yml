@@ -1,0 +1,80 @@
+name: Changed files since last processed commit
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      current_commit_sha: ${{ steps.detect.outputs.current_commit_sha }}
+      changed_files: ${{ steps.detect.outputs.changed_files }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve commit SHAs and changed files
+        id: detect
+        env:
+          LAST_COMMIT_SHA: ${{ vars.LAST_COMMIT_SHA }}
+        run: |
+          set -euo pipefail
+
+          git fetch --prune origin master
+
+          CURRENT_COMMIT_SHA="$(git rev-parse origin/master)"
+          LAST_PROCESSED_SHA="${LAST_COMMIT_SHA:-}"
+
+          echo "Current master commit SHA: ${CURRENT_COMMIT_SHA}"
+          echo "Last processed SHA: ${LAST_PROCESSED_SHA:-<empty>}"
+
+          echo "current_commit_sha=${CURRENT_COMMIT_SHA}" >> "$GITHUB_OUTPUT"
+
+          if [ -z "${LAST_PROCESSED_SHA}" ]; then
+            echo "LAST_COMMIT_SHA is not set. Unable to build diff range."
+            echo "changed_files=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if ! git merge-base --is-ancestor "${LAST_PROCESSED_SHA}" "${CURRENT_COMMIT_SHA}"; then
+            echo "Commit ${LAST_PROCESSED_SHA} is not an ancestor of origin/master. Only master history is supported."
+            exit 1
+          fi
+
+          if ! git rev-parse --verify "${LAST_PROCESSED_SHA}^{commit}" >/dev/null 2>&1; then
+            echo "Commit ${LAST_PROCESSED_SHA} is not available locally. Fetching refs from origin..."
+            git fetch --prune --tags origin '+refs/heads/*:refs/remotes/origin/*'
+          fi
+
+          if ! git rev-parse --verify "${LAST_PROCESSED_SHA}^{commit}" >/dev/null 2>&1; then
+            echo "Commit ${LAST_PROCESSED_SHA} still not found."
+            exit 1
+          fi
+
+          CHANGED_FILES="$(git diff --name-only "${LAST_PROCESSED_SHA}".."${CURRENT_COMMIT_SHA}")"
+
+          echo "Changed files in master since ${LAST_PROCESSED_SHA}:"
+          if [ -n "${CHANGED_FILES}" ]; then
+            printf '%s\n' "${CHANGED_FILES}"
+          else
+            echo "No changed files found."
+          fi
+
+          {
+            echo 'changed_files<<EOF'
+            printf '%s\n' "${CHANGED_FILES}"
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Print summary
+        run: |
+          echo "Latest master commit SHA: ${{ steps.detect.outputs.current_commit_sha }}"
+          echo "Changed files:"
+          printf '%s\n' "${{ steps.detect.outputs.changed_files }}"
