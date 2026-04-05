@@ -1223,7 +1223,7 @@ For more information, see [{#T}](../iam/security/index.md).
 For more information, see [{#T}](../iot-core/security/index.md).
 
 
-## {{ foundation-models-full-name }} {#fm-roles}
+## {{ ai-studio-full-name }} {#fm-roles}
 
 #### ai.playground.user {#ai-playground-user}
 
@@ -1337,7 +1337,7 @@ For more information, see [{#T}](../iot-core/security/index.md).
 
 {% include [serverless-mcpGateways-admin](../_roles/serverless/mcpGateways/admin.md) %}
 
-Learn more in [Access management in {{ foundation-models-full-name }}]({{ link-docs-ai }}ai-studio/security/index).
+Learn more in [Access management in {{ ai-studio-full-name }}]({{ link-docs-ai }}ai-studio/security/index).
 
 
 ## {{ kms-full-name }} {#kms-roles}
@@ -1464,6 +1464,19 @@ For more information, see [{#T}](../lockbox/security/index.md).
 #### mdb.restorer {#mdb-restorer}
 
 {% include [mdb-restorer](../_roles/mdb/restorer.md) %}
+
+#### mdb.switcher {#mdb-switcher}
+
+{% include [mdb.switcher](../_roles/mdb/switcher.md) %}
+
+#### mdb.maintenanceTask.viewer {#mdb-maintenanceTask-viewer}
+
+{% include [mdb.maintenanceTask.viewer](../_roles/mdb/maintenanceTask/viewer.md) %}
+
+#### mdb.maintenanceTask.editor {#mdb-maintenanceTask-editor}
+
+{% include [mdb.maintenanceTask.editor](../_roles/mdb/maintenanceTask/editor.md) %}
+
 
 ## {{ maf-full-name }} {#managed-airflow-roles}
 
