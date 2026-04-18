@@ -1,9 +1,9 @@
 ---
-title: Managing exceptions to {{ k8s }}® Security Posture Management (KSPM) rules in {{ sd-full-name }}
-description: How to manage exceptions to security control rules in the KSPM module.
+title: Managing exceptions to {{ kspm-full-name }} ({{ kspm-name }}) rules in {{ sd-full-name }}
+description: How to manage exceptions to security control rules in the {{ kspm-name }} module.
 ---
 
-# Managing exceptions to the KSPM module's security control rules
+# Managing exceptions to the {{ kspm-name }} module's security control rules
 
 {% include [note-preview](../../../_includes/note-preview.md) %}
 
@@ -21,7 +21,7 @@ To view the list of exceptions from the {{ k8s }} security control rules applica
   1. On the **{{ ui-key.yacloud_org.security.controls.ControlsPage.security_control_r4yn7 }}** page that opens, go to the **{{ ui-key.yacloud_org.security.controls.ControlsPage.exceptions_kw1u7 }}** tab.
 
       The list of exceptions for the {{ k8s }} rules is provided under **{{ ui-key.yacloud_org.security.controls.ControlsExceptionsPage.exceptions_header_qJD5D }}** and contains the following fields:
-      * **{{ ui-key.yacloud_org.security.controls.ControlsExceptionTable.field_name }}**: Reason for exception.
+      * **{{ ui-key.yacloud_org.security.controls.ExceptionDrawer.header_caption }}**: Reason for exception.
       * **{{ ui-key.yacloud_org.security.controls.ControlsExceptionTable.field_status }}**: Active or inactive.
       * **{{ ui-key.yacloud_org.security.controls.ControlsExceptionTable.field_rules }}**: List of rules subject to exception.
       * **{{ ui-key.yacloud_org.security.controls.ControlsExceptionTable.field_author }}**: User who created the exception.
